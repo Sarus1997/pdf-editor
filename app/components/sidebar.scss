@@ -1,0 +1,181 @@
+.sidebar-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  display: flex;
+  overflow: hidden;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 9999;
+
+  /* เมื่อ open ให้ขยาย wrapper ครอบคลุมทั้งจอ */
+  &.open {
+    width: 100%;
+
+    .sidebar {
+      transform: translateX(0);
+      /* slide เข้ามา */
+    }
+
+    .sidebar-overlay {
+      opacity: 1;
+      /* Fade-in */
+    }
+  }
+
+  .sidebar {
+    width: 280px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100%;
+    padding: 0;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 25px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+      .sidebar-title {
+        color: #fff;
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: 0.5px;
+      }
+
+      .close-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #fff;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+          transform: rotate(90deg);
+        }
+      }
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 20px 0;
+      margin: 0;
+      flex: 1;
+      overflow-y: auto;
+
+      li {
+        margin-bottom: 5px;
+        padding: 0 15px;
+
+        .menu-item {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          padding: 16px 20px;
+          color: rgba(255, 255, 255, 0.9);
+          text-decoration: none;
+          border-radius: 12px;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+
+          &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #fff;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+          }
+
+          .menu-icon {
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+          }
+
+          .menu-label {
+            font-size: 16px;
+            font-weight: 500;
+            flex: 1;
+          }
+
+          .menu-arrow {
+            font-size: 18px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+          }
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            transform: translateX(8px);
+
+            &::before {
+              transform: scaleY(1);
+            }
+
+            .menu-arrow {
+              opacity: 1;
+              transform: translateX(0);
+            }
+          }
+
+          &:active {
+            transform: translateX(8px) scale(0.98);
+          }
+        }
+      }
+    }
+
+    .sidebar-footer {
+      padding: 25px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      color: rgba(255, 255, 255, 0.8);
+
+      p {
+        margin: 0 0 5px 0;
+        font-weight: 600;
+        font-size: 16px;
+        color: #fff;
+      }
+
+      small {
+        font-size: 12px;
+        opacity: 0.7;
+      }
+    }
+  }
+
+  .sidebar-overlay {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+}

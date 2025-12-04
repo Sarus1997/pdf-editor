@@ -1,0 +1,430 @@
+@use "sass:color";
+
+// ============================================
+// Variables
+// ============================================
+$primary-color: #1e87f0;
+$primary-hover: #0f7ae5;
+$danger-color: #f0506e;
+$danger-hover: #e73254;
+$success-color: #32d296;
+
+$text-primary: #333;
+$text-muted: #999;
+$text-meta: #999;
+
+$border-color: #e5e5e5;
+$border-light: #f0f0f0;
+
+$bg-default: #fff;
+$bg-muted: #f8f8f8;
+$bg-hover: #fafafa;
+
+$spacing-small: 8px;
+$spacing-medium: 16px;
+$spacing-large: 24px;
+
+$radius-small: 4px;
+$radius-medium: 8px;
+$radius-large: 12px;
+
+$shadow-small: 0 2px 8px rgba(0, 0, 0, 0.08);
+$shadow-medium: 0 5px 15px rgba(0, 0, 0, 0.08);
+$shadow-large: 0 14px 25px rgba(0, 0, 0, 0.16);
+
+$transition-fast: 0.15s ease;
+$transition-normal: 0.3s ease;
+
+// ============================================
+// Responsive Breakpoints
+// ============================================
+$mobile: 480px;
+$tablet: 768px;
+$laptop: 1024px;
+$desktop: 1280px;
+
+// ============================================
+// Global Styles
+// ============================================
+body {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.pdf-merger-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: $spacing-large;
+}
+
+.pdf-header {
+  text-align: center;
+  margin-bottom: $spacing-large * 2;
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: $spacing-small;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-medium;
+
+    .uk-icon {
+      color: $primary-color;
+    }
+  }
+
+  p {
+    color: $text-muted;
+    font-size: 1rem;
+  }
+}
+
+.pdf-main-card {
+  background: $bg-default;
+  border-radius: $radius-large * 2;
+  box-shadow: $shadow-large;
+  padding: $spacing-large * 1.5;
+  border: 1px solid $border-light;
+}
+
+.pdf-upload-area {
+  border: 2px dashed $border-color;
+  border-radius: $radius-large;
+  padding: $spacing-large * 2;
+  margin-bottom: $spacing-large;
+  background: $bg-muted;
+  cursor: pointer;
+  transition: all $transition-normal;
+  text-align: center;
+
+  &:hover {
+    background: $bg-hover;
+    border-color: color.adjust($border-color, $lightness: -10%);
+  }
+
+  &.dragging {
+    border-color: $primary-color;
+    background: color.adjust($primary-color, $lightness: 45%);
+
+    .uk-icon {
+      color: $primary-color;
+    }
+  }
+
+  .uk-icon {
+    color: $text-muted;
+    margin-bottom: $spacing-medium;
+    transition: color $transition-normal;
+  }
+
+  .upload-text {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: $text-primary;
+    margin-bottom: $spacing-small;
+  }
+
+  .upload-hint {
+    font-size: 0.875rem;
+    color: $text-muted;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
+}
+
+.pdf-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-medium;
+
+  h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0;
+  }
+
+  .clear-btn {
+    display: flex;
+    align-items: center;
+    gap: $spacing-small;
+    color: $danger-color;
+    font-size: 0.875rem;
+    padding: $spacing-small $spacing-medium;
+    border-radius: $radius-medium;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: color.adjust($danger-color, $lightness: 45%);
+    }
+  }
+}
+
+.pdf-empty-state {
+  text-align: center;
+  padding: $spacing-large * 3 0;
+  color: $text-muted;
+
+  .uk-icon {
+    opacity: 0.5;
+    margin-bottom: $spacing-medium;
+  }
+}
+
+.pdf-item {
+  background: $bg-default;
+  border: 1px solid $border-color;
+  border-radius: $radius-medium;
+  padding: $spacing-medium;
+  margin-bottom: $spacing-medium;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all $transition-fast;
+
+  &:hover {
+    box-shadow: $shadow-small;
+  }
+
+  &.dragging {
+    opacity: 0.5;
+  }
+
+  .pdf-item-content {
+    display: flex;
+    align-items: center;
+    gap: $spacing-medium;
+    flex: 1;
+    min-width: 0;
+
+    .drag-handle {
+      cursor: grab;
+      padding: $spacing-small;
+      border-radius: $radius-small;
+      transition: background $transition-fast;
+      color: $text-muted;
+
+      &:active {
+        cursor: grabbing;
+      }
+
+      &:hover {
+        background: $bg-muted;
+      }
+    }
+
+    .file-icon {
+      color: $primary-color;
+      flex-shrink: 0;
+    }
+
+    .file-info {
+      flex: 1;
+      min-width: 0;
+
+      .file-name {
+        font-weight: 600;
+        color: $text-primary;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 2px;
+      }
+
+      .file-size {
+        font-size: 0.875rem;
+        color: $text-muted;
+      }
+    }
+  }
+
+  .pdf-item-actions {
+    display: flex;
+    gap: $spacing-small;
+    align-items: center;
+
+    .remove-btn {
+      padding: $spacing-small;
+      border-radius: $radius-medium;
+      transition: all $transition-fast;
+      color: $text-muted;
+
+      &:hover {
+        background: color.adjust($danger-color, $lightness: 45%);
+        color: $danger-color;
+      }
+    }
+  }
+}
+
+.pdf-action-buttons {
+  display: flex;
+  gap: $spacing-medium;
+
+  .merge-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-small;
+    background: linear-gradient(135deg,
+        $primary-color 0%,
+        color.adjust($primary-color, $lightness: -10%) 100%);
+    color: white;
+    padding: $spacing-medium $spacing-large;
+    border-radius: $radius-large;
+    font-weight: 500;
+    transition: all $transition-normal;
+    box-shadow: $shadow-small;
+    border: none;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      box-shadow: $shadow-medium;
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      background: color.adjust($text-muted, $lightness: 30%);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+}
+
+.pdf-tips {
+  margin-top: $spacing-large;
+  background: color.adjust($primary-color, $lightness: 45%);
+  border: 1px solid color.adjust($primary-color, $lightness: 40%);
+  border-radius: $radius-large;
+  padding: $spacing-medium;
+
+  p {
+    font-size: 0.875rem;
+    color: color.adjust($primary-color, $lightness: -20%);
+    margin: 0;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+}
+
+// ========== Mobile (≤ 480px)
+@media (max-width: $mobile) {
+  .pdf-merger-container {
+    padding: $spacing-medium;
+  }
+
+  .pdf-header h1 {
+    font-size: 1.8rem;
+    flex-direction: column;
+    gap: $spacing-small;
+  }
+
+  .pdf-upload-area {
+    padding: $spacing-large;
+  }
+
+  .pdf-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-medium;
+  }
+
+  .pdf-item-content {
+    width: 100%;
+  }
+
+  .pdf-item-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .pdf-action-buttons {
+    flex-direction: column;
+
+    .merge-btn {
+      width: 100%;
+    }
+  }
+
+  .pdf-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-small;
+  }
+}
+
+
+
+// ========== Tablet (≤ 768px)
+@media (max-width: $tablet) {
+  .pdf-merger-container {
+    max-width: 660px;
+  }
+
+  .pdf-header h1 {
+    font-size: 2.1rem;
+  }
+
+  .pdf-main-card {
+    padding: $spacing-large;
+  }
+
+  .pdf-item {
+    padding: $spacing-medium;
+    flex-wrap: wrap;
+  }
+
+  .pdf-item-content {
+    min-width: 100%;
+  }
+
+  .pdf-item-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .pdf-action-buttons {
+    flex-direction: column;
+    gap: $spacing-medium;
+
+    .merge-btn {
+      width: 100%;
+    }
+  }
+}
+
+
+
+// ========== Laptop (≤ 1024px)
+@media (max-width: $laptop) {
+  .pdf-merger-container {
+    max-width: 800px;
+  }
+
+  .pdf-header h1 {
+    font-size: 2.3rem;
+  }
+
+  .pdf-upload-area {
+    padding: $spacing-large * 1.5;
+  }
+}
+
+
+
+// ========== Desktop (≤ 1280px)
+@media (max-width: $desktop) {
+  .pdf-merger-container {
+    max-width: 1000px;
+  }
+}

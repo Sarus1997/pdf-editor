@@ -1,66 +1,133 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import type { PDFFile } from "./types";
+import PdfList from "./components/PdfList";
+import { mergePDFs } from "./utils/pdfUtils";
+
+// Icons (แทน uk-icon)
+import { FileEdit, CloudUpload, Download } from "lucide-react";
+
+const uid = () => Math.random().toString(36).slice(2, 10);
+
+export default function Page() {
+  const [files, setFiles] = useState<PDFFile[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleUpload = (selectedFiles: FileList | null) => {
+    if (!selectedFiles) return;
+
+    const newFiles: PDFFile[] = Array.from(selectedFiles)
+      .filter((file) => file.type === "application/pdf")
+      .map((file, index) => ({
+        id: uid(),
+        file,
+        name: file.name,
+        order: files.length + index,
+      }));
+
+    setFiles((prev) => [...prev, ...newFiles]);
+  };
+
+  const handleFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleUpload(event.target.files);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    handleUpload(e.dataTransfer.files);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const downloadMerged = async () => {
+    try {
+      const blob = await mergePDFs(files.map((f) => f.file));
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "merged.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      alert("เกิดข้อผิดพลาดขณะรวมไฟล์ PDF");
+    }
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div className="pdf-merger-container">
+      {/* Header */}
+      <div className="pdf-header">
+        <h1 className="flex items-center gap-2">
+          <FileEdit size={32} />
+          PDF Merger
+        </h1>
+        <p>อัปโหลด จัดเรียง และรวมไฟล์ PDF ได้อย่างง่ายดาย</p>
+      </div>
+
+      {/* Main Card */}
+      <div className="pdf-main-card">
+        {/* Upload Area */}
+        <div
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          className={`pdf-upload-area ${isDragging ? "dragging" : ""}`}
+        >
+          <label style={{ cursor: "pointer", display: "block" }}>
+            <input
+              type="file"
+              accept="application/pdf"
+              multiple
+              onChange={handleFileInput}
             />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+            <div className="flex flex-col items-center gap-2">
+              <CloudUpload size={48} />
+              <div className="upload-text">
+                {isDragging ? "วางไฟล์ที่นี่" : "คลิกหรือลากไฟล์มาที่นี่"}
+              </div>
+              <div className="upload-hint">รองรับไฟล์ PDF เท่านั้น</div>
+            </div>
+          </label>
         </div>
-      </main>
+
+        {/* File List */}
+        <PdfList files={files} setFiles={setFiles} />
+
+        {/* Action Button */}
+        <div className="pdf-action-buttons">
+          <button
+            className="merge-btn flex items-center gap-2"
+            onClick={downloadMerged}
+            disabled={files.length === 0}
+          >
+            <Download size={20} />
+            รวมและดาวน์โหลด PDF
+          </button>
+        </div>
+      </div>
+
+      {/* Tips */}
+      <div className="pdf-tips">
+        <p>
+          <strong>💡 เคล็ดลับ:</strong> ลากไฟล์เพื่อจัดเรียงลำดับ หรืออัปโหลดด้วยการลากไฟล์มาวางในกรอบด้านบน
+        </p>
+      </div>
     </div>
   );
 }
