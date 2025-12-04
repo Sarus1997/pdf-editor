@@ -1,30 +1,15 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "../contexts/LanguageContext";
 import "./navbar.scss";
 import Sidebar from "./Sidebar";
+import { useState } from "react";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-
-  // 🟦 โหลดค่าภาษาจาก localStorage (ถ้ามี)
-  const [lang, setLang] = useState<"en" | "th">("en");
-
-  useEffect(() => {
-    const savedLang = localStorage.getItem("appLanguage") as "en" | "th" | null;
-    if (savedLang) {
-      setLang(savedLang);
-    }
-  }, []);
-
-  // 🟩 เมื่อเปลี่ยนภาษา → บันทึกลง localStorage
-  const handleChangeLanguage = () => {
-    const newLang = lang === "en" ? "th" : "en";
-    setLang(newLang);
-    localStorage.setItem("appLanguage", newLang);
-  };
+  const { lang, toggleLang } = useLanguage();
 
   return (
     <>
@@ -32,9 +17,7 @@ export default function Navbar() {
         <div className="navbar-content">
           <div className="navbar-left">
             <button className="sidebar-toggle" onClick={() => setOpen(true)}>
-              <span></span>
-              <span></span>
-              <span></span>
+              <span></span><span></span><span></span>
             </button>
 
             <Link href="/" className="navbar-logo">
@@ -45,20 +28,26 @@ export default function Navbar() {
 
           <div className="navbar-right">
             <ul className="navbar-nav">
-              <li><Link href="/">Home</Link></li>
-              <li><Link href="/about">About</Link></li>
-              <li><Link href="/contact">Contact</Link></li>
+              <li><Link href="/">{lang === "en" ? "Home" : "หน้าแรก"}</Link></li>
+              <li><Link href="/about">{lang === "en" ? "About" : "เกี่ยวกับ"}</Link></li>
+              <li><Link href="/contact">{lang === "en" ? "Contact" : "ติดต่อ"}</Link></li>
             </ul>
+
+            {/* ปุ่มเปลี่ยนภาษาแบบรูปธงจาก public */}
+            <button className="lang-switch-btn" onClick={toggleLang}>
+              <Image
+                src={lang === "en" ? "/img/flag/england.svg" : "/img/flag/thailand.svg"}
+                alt="language flag"
+                width={28}
+                height={20}
+                className="flag-img"
+              />
+            </button>
           </div>
         </div>
       </nav>
 
-      <Sidebar
-        open={open}
-        onClose={() => setOpen(false)}
-        language={lang}
-        onChangeLanguage={handleChangeLanguage}
-      />
+      <Sidebar open={open} onClose={() => setOpen(false)} />
     </>
   );
 }

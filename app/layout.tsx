@@ -9,9 +9,9 @@ import "uikit/dist/css/uikit.min.css";
 import "./globals.scss";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import { LanguageProvider } from "./contexts/LanguageContext";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // Initialize UIkit safely
   useEffect(() => {
     UIkit.use(Icons);
   }, []);
@@ -19,9 +19,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="th">
       <body>
-        <Navbar />
-        {children}
-        <Footer />
+        <LanguageProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );
