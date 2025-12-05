@@ -51,6 +51,16 @@ export default function HomePage() {
           </p>
         </Link>
 
+        {/* Edit PDF */}
+        <div className="tool-card disabled">
+          <div className="icon-wrapper">
+            <FileEdit size={48} />
+          </div>
+          <h2 className="tool-title">
+            {lang === "en" ? "Edit PDF (coming soon)" : "แก้ไข PDF (กำลังพัฒนา)"}
+          </h2>
+        </div>
+
         {/* Split PDF */}
         <div className="tool-card disabled">
           <div className="icon-wrapper">
@@ -88,16 +98,6 @@ export default function HomePage() {
           </div>
           <h2 className="tool-title">
             {lang === "en" ? "Search in PDF (coming soon)" : "ค้นหาใน PDF (กำลังพัฒนา)"}
-          </h2>
-        </div>
-
-        {/* Edit PDF */}
-        <div className="tool-card disabled">
-          <div className="icon-wrapper">
-            <FileEdit size={48} />
-          </div>
-          <h2 className="tool-title">
-            {lang === "en" ? "Edit PDF (coming soon)" : "แก้ไข PDF (กำลังพัฒนา)"}
           </h2>
         </div>
       </div>
