@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { PDFFile } from "./../types";
 import PdfList from "./../components/PdfList";
 import UploadArea from "./UploadArea";
-import { mergePDFs } from "./../utils/pdfUtils";
+import { mergePDFs } from "../utils/mergePDFs";
 import { FileEdit, Download, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 

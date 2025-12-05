@@ -45,14 +45,19 @@ export default function HomePage() {
         </div>
 
         {/* Compress PDF */}
-        <div className="tool-card disabled">
+        <Link href="/compress" className="tool-card">
           <div className="icon-wrapper">
             <FileDown size={48} />
           </div>
           <h2 className="tool-title">
-            {lang === "en" ? "Compress PDF (coming soon)" : "บีบอัด PDF (กำลังพัฒนา)"}
+            {lang === "en" ? "Compress PDF" : "บีบอัด PDF"}
           </h2>
-        </div>
+          <p className="tool-desc">
+            {lang === "en"
+              ? "Reduce the file size of your PDFs"
+              : "ลดขนาดไฟล์ PDF ของคุณ"}
+          </p>
+        </Link>
       </div>
     </div>
   );
