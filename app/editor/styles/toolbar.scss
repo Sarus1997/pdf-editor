@@ -1,0 +1,239 @@
+.toolbar {
+  width: 280px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  height: fit-content;
+
+  @media (max-width: 1200px) {
+    width: 100%;
+  }
+
+  .toolbar-section {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e9ecef;
+
+    &:last-child {
+      margin-bottom: 0;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      svg {
+        width: 18px;
+        height: 18px;
+        color: #667eea;
+      }
+    }
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .tool-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+
+    &:hover {
+      border-color: #667eea;
+      background: #f8f9fa;
+      transform: translateY(-2px);
+    }
+
+    &.active {
+      border-color: #667eea;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      color: #667eea;
+
+      .tool-icon {
+        color: #667eea;
+      }
+    }
+
+    .tool-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #495057;
+      transition: color 0.3s ease;
+    }
+
+    .tool-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #495057;
+    }
+
+    .tool-shortcut {
+      font-size: 10px;
+      color: #6c757d;
+      margin-top: 2px;
+    }
+  }
+
+  .color-palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+
+    .color-button {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 3px solid white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      &:hover {
+        transform: scale(1.1);
+      }
+
+      &.active {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 3px white, 0 0 0 6px #667eea;
+      }
+    }
+  }
+
+  .zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .zoom-button {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 18px;
+      font-weight: bold;
+
+      &:hover {
+        border-color: #667eea;
+        background: #f8f9fa;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+
+        &:hover {
+          border-color: #e9ecef;
+          background: white;
+        }
+      }
+    }
+
+    .zoom-display {
+      flex: 1;
+      text-align: center;
+      font-weight: 600;
+      color: #495057;
+    }
+  }
+
+  .history-controls {
+    display: flex;
+    gap: 10px;
+
+    .history-button {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      background: white;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 14px;
+
+      &:hover:not(:disabled) {
+        border-color: #667eea;
+        background: #f8f9fa;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+
+  .stroke-width-control {
+    .stroke-options {
+      display: flex;
+      gap: 8px;
+
+      .stroke-option {
+        flex: 1;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          border-color: #667eea;
+        }
+
+        &.active {
+          border-color: #667eea;
+          background: #f8f9fa;
+        }
+
+        .stroke-preview {
+          background: #333;
+          border-radius: 2px;
+        }
+      }
+    }
+  }
+}
